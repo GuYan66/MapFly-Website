@@ -60,7 +60,7 @@
 
       '<section class="section" id="video"><div class="container is-max-desktop"><div class="section-heading has-text-centered"><p class="section-kicker">PROJECT VIDEO</p><h2 class="title is-2">MapFly in 2 minutes 51 seconds.</h2><p>Overview of the toolkit, tracks, data, model, and evaluation examples.</p></div><div class="project-video"><video controls playsinline preload="metadata" poster="assets/hero-poster.jpg"><source src="assets/overview.mp4" type="video/mp4"></video></div></div></section>',
 
-      '<section class="section section-tint" id="resources"><div class="container is-max-desktop"><div class="columns is-variable is-8 is-vcentered"><div class="column is-6"><p class="section-kicker">RESOURCES</p><h2 class="title is-2">Build on MapFly.</h2><p class="resource-copy">The toolkit, MapFly-13K dataset, and reference policy code are planned for public release upon publication.</p><div class="buttons"><a class="button is-dark is-rounded" href="assets/MapFly.pdf" target="_blank" rel="noopener">Read the paper</a><a class="button is-rounded" href="assets/overview.mp4" download>Download project video</a></div></div><div class="column is-6"><div class="release-list"><div><span>MapFly Toolkit</span><b data-resource-status="code">Coming soon</b></div><div><span>MapFly-13K Dataset</span><b data-resource-status="dataset">Coming soon</b></div><div><span>MapFly-Agent</span><b data-resource-status="code">Coming soon</b></div></div></div></div></div></section>',
+      '<section class="section section-tint" id="resources"><div class="container is-max-desktop"><div class="columns is-variable is-8 is-vcentered"><div class="column is-6"><p class="section-kicker">RESOURCES</p><h2 class="title is-2">Build on MapFly.</h2><p class="resource-copy">The toolkit, MapFly-13K dataset, Linux UE environments, and MapFly-Agent are publicly available.</p><div class="buttons"><a class="button is-dark is-rounded" href="assets/MapFly.pdf" target="_blank" rel="noopener">Read the paper</a><a class="button is-rounded" href="assets/overview.mp4" download>Download project video</a></div></div><div class="column is-6"><div class="release-list"><div><span>MapFly Toolkit</span><b><a href="https://github.com/GuYan66/MapFly" target="_blank" rel="noopener">GitHub</a></b></div><div><span>MapFly-13K Dataset</span><b><a href="https://huggingface.co/datasets/EzGuYan/MapFly" target="_blank" rel="noopener">Hugging Face</a></b></div><div><span>UE environments</span><b><a href="https://huggingface.co/datasets/EzGuYan/MapFly_DataGen" target="_blank" rel="noopener">Hugging Face</a></b></div><div><span>MapFly-Agent</span><b><a href="https://huggingface.co/EzGuYan/MapFly-Agent" target="_blank" rel="noopener">Hugging Face</a></b></div></div></div></div></div></section>',
 
       '<section class="section citation-section"><div class="container is-max-desktop"><div class="citation-card"><div class="citation-head"><div><p class="section-kicker">CITATION</p><h2 class="title is-4">Manuscript citation</h2></div><button class="button is-small is-rounded" id="copy-bibtex">Copy BibTeX</button></div><pre id="bibtex-code">@unpublished{mapfly,\n  title = {MapFly: A Benchmark for Prior-Map-Guided Aerial Visual Navigation},\n  author = {Anonymous Authors},\n  note = {Manuscript under review},\n  year = {2026}\n}</pre><p class="copy-feedback" id="copy-feedback" aria-live="polite"></p></div></div></section>'
     ].join('');
@@ -136,15 +136,15 @@
     if (config.publication) $('#publication').textContent = config.publication;
     if (config.affiliation) { const affiliation=document.createElement('p'); affiliation.className='affiliation'; affiliation.textContent=config.affiliation; $('#publication').after(affiliation); }
     if (config.bibtex) $('#bibtex-code').textContent = config.bibtex;
-    ['code','dataset'].forEach(function(type) {
-      const url = config[type + 'Url'];
-      if (!url || !/^https?:\/\//i.test(url)) return;
-      const link = $('#' + type + '-link');
+    [['code','codeUrl'],['dataset','datasetUrl'],['env','envUrl']].forEach(function(item) {
+      const url = config[item[1]];
+      const link = $('#' + item[0] + '-link');
+      if (!link || !url || !/^https?:\/\//i.test(url)) return;
       link.href = url; link.target = '_blank'; link.rel = 'noopener';
+      link.classList.add('is-dark');
       link.classList.remove('resource-pending');
       link.removeAttribute('aria-disabled');
-      const small = $('small', link); if (small) small.textContent = 'Available';
-      $$('[data-resource-status="' + type + '"]').forEach(function(status) { status.textContent = 'Available'; });
+      const small = $('small', link); if (small) small.remove();
     });
   }
 
@@ -218,7 +218,7 @@
     $('.matched-section h3',dataset).textContent='Matched observations and prior maps';
     $('.matched-copy',dataset).textContent='The same episode can be represented with an OSM-style or satellite-style map, with start–goal markers and an optional route. The examples below show these matched inputs alongside a first-person observation.';
     const resources=$('#resources');
-    resources.innerHTML='<summary>Code and dataset availability</summary><p class="paper-paragraph">The toolkit, MapFly-13K dataset, and reference policy code are planned for public release upon publication. <a href="assets/MapFly.pdf" target="_blank" rel="noopener">Read the paper</a> or <a href="assets/overview.mp4" download>download the project video</a>.</p><p class="release-inline">Code: <span data-resource-status="code">Coming soon</span> · Dataset: <span data-resource-status="dataset">Coming soon</span></p>';
+    resources.innerHTML='<summary>Code and dataset availability</summary><p class="paper-paragraph">The toolkit, MapFly-13K, UE environments, and MapFly-Agent are released. <a href="https://github.com/GuYan66/MapFly" target="_blank" rel="noopener">Code</a> · <a href="https://huggingface.co/datasets/EzGuYan/MapFly" target="_blank" rel="noopener">Dataset</a> · <a href="https://huggingface.co/datasets/EzGuYan/MapFly_DataGen" target="_blank" rel="noopener">Environment</a> · <a href="https://huggingface.co/EzGuYan/MapFly-Agent" target="_blank" rel="noopener">MapFly-Agent</a>. <a href="assets/MapFly.pdf" target="_blank" rel="noopener">Read the paper</a> or <a href="assets/overview.mp4" download>download the project video</a>.</p>';
 
     const examples=$('#tracks .container');
     $('.rollout-block',examples).remove();
