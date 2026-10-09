@@ -1,0 +1,25 @@
+name: Publish website to gh-pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-website
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Prepare static site
+        run: |
+          mkdir _site
+          cp index.html site-config.js .nojekyll TEMPLATE-NOTICE.md _site/
+          cp -R assets static _site/
+      - name: Publish gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4
+        with:
+          branch: gh-pages
+          folder: _site
